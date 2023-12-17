@@ -42,7 +42,7 @@ router.get('/isConfirmZero/queue/',protect, isAdmin, getQueueListWithIsConfirmZe
 router.get('/isConfirmOne/queue/',protect, isAdmin, getQueueListWithIsConfirmOne);
 router.get('/isConfirmTwo/queue/',protect, isAdmin, getQueueListWithIsConfirmTwo);
 router.post('/updateIsConfirm/queue', protect, isAdmin, updateIsConfirm);
-router.get('/statistical/queue', protect, isBoss, getStatistical);
+router.get('/statistical/queue', protect, isAdmin, getStatistical);
 
 
 
