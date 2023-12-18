@@ -128,7 +128,7 @@ const changePassword = asyncHandler(async (req, res) => {
 // add product like list
 
 const addLikedProduct = asyncHandler(async (req, res) => {
-  const { productId, size, color } = req.body;
+  const { productId, size, color, quantity } = req.body;
 
   try {
     // Tìm người dùng bằng id
@@ -155,6 +155,7 @@ const addLikedProduct = asyncHandler(async (req, res) => {
           productId,
           size,
           color,
+          quantity
         });
         await user.save();
         return res.status(200).json({
@@ -168,6 +169,7 @@ const addLikedProduct = asyncHandler(async (req, res) => {
       productId,
       size,
       color,
+      quantity
     });
     await user.save();
 

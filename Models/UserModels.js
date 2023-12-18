@@ -49,6 +49,9 @@ const UserSchema = mongoose.Schema({
       color: {
         type: String,
       },
+      quantity: {
+        type: Number,
+      }
     },
   ],
 });
