@@ -1,5 +1,7 @@
 import express from 'express';
 import {
+  getUser,
+  getUsers,
   addLikedProduct,
   changePassword,
   deleteLikedProduct,
@@ -14,7 +16,8 @@ import { isBoss, protect } from '../Middleware/Auth.js';
 
 /* Public routes */
 const router = express.Router();
-
+router.get('/:id',getUser)
+router.get('/',getUsers);
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.put('/updateProfile', protect, updateProfileUser);

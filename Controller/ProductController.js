@@ -48,7 +48,7 @@ const createProduct = asyncHandler(async (req, res) => {
   product
     .save()
     .then(() => {
-      res.status(201).json({ message: 'Product created successfully' });
+      res.status(201).json({ message: 'Product created successfully', product});
     })
     .catch((error) => {
       res.status(500).json({ error: 'Failed to create product', error });
@@ -64,6 +64,8 @@ const showAllProducts = asyncHandler(async (req, res) => {
     res.status(500).json({ success: false, error: 'Error fetching products' });
   }
 });
+
+
 const addProductsToQueue = asyncHandler(async (req, res) => {
   const { idUser, products, voucherId, finalPrice } = req.body;
 
@@ -421,7 +423,7 @@ const updateProduct = asyncHandler(async (req, res) => {
       product.price = price || product.price;
       product.images = images || product.images;
       const updatedProduct = await product.save();
-      res.status(200).json(updatedProduct);
+      res.status(200).json({message:"Update Thành Công ", updatedProduct});
     } else {
       res.status(404);
       throw new Error('Product not found');

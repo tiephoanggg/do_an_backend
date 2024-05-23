@@ -4,11 +4,46 @@ import mongoose from 'mongoose';
 import { generateToken } from '../Middleware/Auth.js';
 import Order from '../Models/OrderModels.js';
 import Queue from '../Models/QueueModels.js';
-// register user
+
+//get users
+
+const getUsers = asyncHandler( async(req, res) => {
+  try {
+    console.log(22222222222);
+    const users= await User.find({});
+    console.log('tiep3333333333',users);
+    res.json(users)
+  } catch (error) {
+    console.log(333333333333,error);
+    res.status(500).json({ status: 500, message: "Not found user !!" })
+  }
+})
+
+
+// get user 
+const getUser = asyncHandler( async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if(user) {
+      return res.status(200).json({status:200, message: user })
+    }else {
+      return res.status(404).json({status:400, message: 'notfound'})
+    }
+  
+  } catch (error) {   
+      res.status(500).send('NOT FOUND User !!');
+  }
+})
+  
+
+// register 
 const registerUser = asyncHandler(async (req, res) => {
+  console.log(1111111111 );
   const { fullName, email, phoneNumber, address, password, images } = req.body;
   try {
+    console.log(22222222222222);
     const userExits = await User.findOne({ email });
+    console.log(333333333333,userExits);
     // check if user already exists
     if (userExits) {
       res.status(400);
@@ -16,7 +51,7 @@ const registerUser = asyncHandler(async (req, res) => {
         'Email already exists, please register with another email address'
       );
     }
-
+    console.log(444444444444);
     // create new user in MongoDB without hashing the password
     const user = await User.create({
       _id: new mongoose.Types.ObjectId(),
@@ -27,10 +62,10 @@ const registerUser = asyncHandler(async (req, res) => {
       password, // Here, the password is stored as plain text
       images,
     });
-
     // if create user successfully, send user token to client
     if (user) {
       res.status(201).json({
+        status:200, message: "DANG KY THANH CONG",
         _id: user._id,
         fullName: user.fullName,
         email: user.email,
@@ -42,21 +77,24 @@ const registerUser = asyncHandler(async (req, res) => {
         token: generateToken(user._id),
       });
     } else {
+      console.log(6666666);
       res.status(400);
       throw new Error('Invalid user data');
     }
   } catch (error) {
+    console.log(777777777777777,error);
     res.status(400).json({ message: error.message });
   }
 });
 
-// login useer
+// login user
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
     if (user && user.password === password) {
       res.status(200).json({
+        message : 'Đăng Nhập Thành Công',
         _id: user._id,
         fullName: user.fullName,
         email: user.email,
@@ -77,6 +115,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
 // update profile user
 const updateProfileUser = asyncHandler(async (req, res) => {
+  console.log(111111111111);
   const { fullName, phoneNumber, address, images } = req.body;
   try {
     const user = await User.findById(req.user._id);
@@ -86,7 +125,8 @@ const updateProfileUser = asyncHandler(async (req, res) => {
       user.address = address || user.address;
       user.images = images || user.images;
       const updatedUser = await user.save();
-      res.json({
+      res.status(200).json({
+        message : 'Update Thành Công',
         _id: updatedUser._id,
         fullName: updatedUser.fullName,
         email: updatedUser.email,
@@ -108,12 +148,14 @@ const updateProfileUser = asyncHandler(async (req, res) => {
 // change password user
 const changePassword = asyncHandler(async (req, res) => {
   const { oldPassword, newPassword } = req.body;
+  console.log(1111111111,req.body);
   try {
     const user = await User.findById(req.user._id);
     /* console.log('user', user); */
     if (user && user.password === oldPassword) {
       // Kiểm tra mật khẩu cũ trùng khớp
       user.password = newPassword; // Gán mật khẩu mới trực tiếp vào user object
+      console.log(1111111111111,newPassword);
       await user.save();
       res.json({ message: 'Password changed' });
     } else {
@@ -312,7 +354,11 @@ const getProfile = asyncHandler(async (req, res) => {
     images,
   });
 });
+
+
+
 export {
+  getUser,
   registerUser,
   loginUser,
   updateProfileUser,
@@ -322,4 +368,5 @@ export {
   getLikedProducts,
   viewAllLikedProduct,
   getProfile,
+  getUsers
 };

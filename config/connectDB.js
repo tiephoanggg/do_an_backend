@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 export const connectDB = async () => {
   try {
     mongoose.set('strictQuery', false);
-    const condb = await mongoose.connect(process.env.MONGO_URI, {
+    const condb = await mongoose.connect('mongodb://127.0.0.1:27017/caniva', {
       /* useNewUrlParser: true,
       useUnifiedTopology: true, */
     });
